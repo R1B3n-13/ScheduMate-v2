@@ -22,7 +22,6 @@ CREATE TABLE class_users (
   class_id UUID REFERENCES classes(class_id),
   user_id INT REFERENCES users(user_id),
   class_role class_role DEFAULT 'user',
-	is_instructor BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY (class_id, user_id)
 );
 
