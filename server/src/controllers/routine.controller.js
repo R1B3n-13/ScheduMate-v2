@@ -20,4 +20,14 @@ const fetchRoutineEvents = async (req, res, next) => {
   }
 };
 
-export { createRoutineEvent, fetchRoutineEvents };
+// Delete Routine Event endpoint
+const deleteRoutineEvent = async (req, res, next) => {
+  try {
+    await routineService.delete(req.body);
+    return res.status(200).json({ status: "success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createRoutineEvent, fetchRoutineEvents, deleteRoutineEvent };

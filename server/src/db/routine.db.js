@@ -66,4 +66,41 @@ const fetchRoutineEventsDB = async (class_id) => {
   }
 };
 
-export { createRoutineEventDB, fetchRoutineEventsDB };
+const deleteRoutineEventDB = async (
+  class_id,
+  datetimes,
+  event_day,
+  event_time
+) => {
+  try {
+    const client = await pool.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      for (const datetime of datetimes) {
+        await client.query(
+          "DELETE FROM calendar_events WHERE class_id = $1 and event_datetime = $2 and is_routine = TRUE;",
+          [class_id, datetime]
+        );
+      }
+
+      await client.query(
+        "DELETE FROM routine_events WHERE class_id = $1 and event_day = $2 and event_time = $3;",
+        [class_id, event_day, event_time]
+      );
+
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK");
+
+      throw new ErrorHandler(500, "An error occurred");
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    throw new ErrorHandler(500, "An error occurred");
+  }
+};
+
+export { createRoutineEventDB, fetchRoutineEventsDB, deleteRoutineEventDB };

@@ -7,14 +7,18 @@ import {
 
 class CalendarService {
   async createMultiple(eventData) {
-    const { events, dates } = eventData;
-    const calendarEvents = await createMultipleCalendarEventsDB(events, dates);
+    const { class_id, events, dates } = eventData;
+    const calendarEvents = await createMultipleCalendarEventsDB(
+      class_id,
+      events,
+      dates
+    );
     return calendarEvents;
   }
 
   async deleteMultiple(eventDate) {
-    const { dates } = eventDate;
-    await deleteMultipleCalendarEventsDB(dates);
+    const { class_id, dates } = eventDate;
+    await deleteMultipleCalendarEventsDB(class_id, dates);
   }
 
   async create(eventData) {

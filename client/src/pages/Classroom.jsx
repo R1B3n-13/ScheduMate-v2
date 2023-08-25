@@ -2,12 +2,13 @@ import Sidebar from "../components/Sidebar";
 import Tabs from "../components/Tabs";
 import RoutineTab from "../components/RoutineTab";
 import CalenderTab from "../components/CalenderTab";
+import EventsTab from "../components/EventsTab";
 
 export default function Dashboard() {
   const tabs = [
     {
       label: "Events",
-      content: <p>This is the content of Tab 1.</p>,
+      content: <EventsTab />,
     },
     {
       label: "Routine",

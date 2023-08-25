@@ -8,7 +8,7 @@ const RoutineContextProvider = ({ children }) => {
   const { focusedClass } = useClassroomContext();
   const [selectedDay, setSelectedDay] = useState(0);
   const [routineEvents, setRoutineEvents] = useState([]);
-  const [isEventAdded, setIsEventAdded] = useState(false);
+  const [isRoutineEventChanged, setIsRoutineEventChanged] = useState(false);
   const days = [
     "Sunday",
     "Monday",
@@ -26,11 +26,11 @@ const RoutineContextProvider = ({ children }) => {
       }).then((res) => {
         if (res?.data.routineEvents.length > 0) {
           setRoutineEvents([routineEvents, ...res.data.routineEvents]);
-          setIsEventAdded(false);
+          setIsRoutineEventChanged(false);
         }
       });
     }
-  }, [focusedClass, isEventAdded]);
+  }, [focusedClass, isRoutineEventChanged]);
 
   return (
     <RoutineContext.Provider
@@ -39,7 +39,7 @@ const RoutineContextProvider = ({ children }) => {
         setSelectedDay,
         days,
         routineEvents,
-        setIsEventAdded,
+        setIsRoutineEventChanged,
       }}
     >
       {children}

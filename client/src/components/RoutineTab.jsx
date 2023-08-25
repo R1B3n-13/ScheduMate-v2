@@ -5,14 +5,20 @@ import { useClassroomContext } from "../contexts/classroomContext";
 import { useRoutineContext } from "../contexts/routineContext";
 import { useCalendarContext } from "../contexts/calendarContext";
 import { useState } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function RoutineTab() {
   const { focusedClass, userIdToNameMap } = useClassroomContext();
-  const { days, selectedDay, setSelectedDay, routineEvents } =
-    useRoutineContext();
-  const { setIsEventAdded } = useCalendarContext();
+  const {
+    days,
+    selectedDay,
+    setSelectedDay,
+    routineEvents,
+    setIsRoutineEventChanged,
+  } = useRoutineContext();
+  const { setIsCalendarEventChanged, calendarEvents } = useCalendarContext();
   const [formData, setFormData] = useState({
     startingDate: "",
     endingDate: "",
@@ -20,6 +26,7 @@ export default function RoutineTab() {
   const [errorMessage, setErrorMessage] = useState("");
   const events = [];
   const dates = [];
+  const datetimes = [];
 
   let routine = new Map();
 
@@ -72,6 +79,7 @@ export default function RoutineTab() {
               instructor_id: item.instructor_id,
               event_name: item.event_name,
               event_description: item.event_description,
+              event_type: item.event_type,
               event_datetime: timeStamp,
               is_routine: true,
             });
@@ -79,13 +87,17 @@ export default function RoutineTab() {
         }
       }
 
-      API.post("/classroom/calendar/createMultiple", { events, dates })
+      API.post("/classroom/calendar/createMultiple", {
+        class_id: focusedClass.class_id,
+        events,
+        dates,
+      })
         .then(function () {
           setFormData({
             startingDate: "",
             endingDate: "",
           });
-          setIsEventAdded(true);
+          setIsCalendarEventChanged(true);
           toast.success("Events added successfully", {
             position: toast.POSITION.BOTTOM_RIGHT,
             theme: "dark",
@@ -101,6 +113,47 @@ export default function RoutineTab() {
           setErrorMessage(error.response.data.message);
         });
     }
+  };
+
+  const deleteEvent = (day, event_time) => {
+    const event_day = days[day];
+
+    datetimes.length = 0;
+    calendarEvents.forEach((event) => {
+      const { event_datetime } = event;
+      const datetime = dayjs(event_datetime);
+
+      if (
+        datetime.day() === day &&
+        datetime.format("HH:mm:ss") === event_time
+      ) {
+        datetimes.push(datetime.format("YYYY-MM-DD HH:mm:ss"));
+      }
+    });
+
+    API.post("/classroom/routine/delete", {
+      datetimes,
+      class_id: focusedClass.class_id,
+      event_day,
+      event_time,
+    })
+      .then(function () {
+        toast.success("Event deleted successfully", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "dark",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          transition: Slide,
+        });
+        setIsCalendarEventChanged(true);
+        setIsRoutineEventChanged(true);
+      })
+      .catch(function (error) {
+        setErrorMessage(error.response.data.message);
+      });
   };
 
   return (
@@ -131,7 +184,7 @@ export default function RoutineTab() {
             })}
           </div>
           <div className="w-96 h-96 pl-3 overflow-auto">
-            <div className="flex font-semibold border-b border-gray-700">
+            <div className="flex mb-3 font-semibold">
               Schedule for
               <h1 className="ml-2 text-cyan-300">{days[selectedDay]}</h1>
             </div>
@@ -139,15 +192,31 @@ export default function RoutineTab() {
               routine.get(days[selectedDay]).map(
                 (event, index) =>
                   event.class_id === focusedClass.class_id && (
-                    <li key={index} className="text-xs mt-2">
-                      <p className="text-red-500">Time: {event.event_time}</p>
-                      <p>Name: {event.event_name}</p>
-                      <p>Description: {event.event_description}</p>
-                      <p>Type: {event.event_type}</p>
-                      <p>
-                        Instructor: {userIdToNameMap.get(event.instructor_id)}
-                      </p>
-                    </li>
+                    <div className="bg-gray-800 mb-3 text-sm text-slate-300 border border-slate-600 rounded p-3 w-72 shadow-lg whitespace-nowrap">
+                      <div className="flex overflow-x-scroll">
+                        <li key={index} className="text-xs">
+                          <p className="text-green-400 font-semibold">
+                            Time: {event.event_time}
+                          </p>
+                          <p>Name: {event.event_name}</p>
+                          <p>Description: {event.event_description}</p>
+                          <p>Type: {event.event_type}</p>
+                          <p>
+                            Instructor:{" "}
+                            {userIdToNameMap.get(event.instructor_id)}
+                          </p>
+                        </li>
+                        {focusedClass &&
+                          focusedClass.class_role === "admin" && (
+                            <RiDeleteBin5Line
+                              className="flex ml-auto mt-1 cursor-pointer text-red-500"
+                              onClick={() =>
+                                deleteEvent(selectedDay, event.event_time)
+                              }
+                            />
+                          )}
+                      </div>
+                    </div>
                   )
               )}
           </div>

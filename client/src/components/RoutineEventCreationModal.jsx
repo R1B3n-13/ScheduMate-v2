@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function RoutineEventCreationModal() {
   const { focusedClass, classIdToUserIdMap, userIdToNameMap } =
     useClassroomContext();
-  const { days, selectedDay, setIsEventAdded } = useRoutineContext();
+  const { days, selectedDay, setIsRoutineEventChanged } = useRoutineContext();
   const [isModalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -58,7 +58,13 @@ export default function RoutineEventCreationModal() {
       instructor_id,
     })
       .then(function () {
-        setFormData({});
+        setFormData({
+          event_time: null,
+          event_name: null,
+          event_description: null,
+          event_type: "class",
+          instructor_id: null,
+        });
         toast.success("Event created successfully", {
           position: toast.POSITION.BOTTOM_RIGHT,
           theme: "dark",
@@ -70,7 +76,7 @@ export default function RoutineEventCreationModal() {
           transition: Slide,
         });
         closeModal();
-        setIsEventAdded(true);
+        setIsRoutineEventChanged(true);
       })
       .catch(function (error) {
         setErrorMessage(error.response.data.message);

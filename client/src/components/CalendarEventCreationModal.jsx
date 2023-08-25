@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function CalendarEventCreationModal() {
   const { focusedClass, classIdToUserIdMap, userIdToNameMap } =
     useClassroomContext();
-  const { selectedDate, setIsEventAdded } = useCalendarContext();
+  const { selectedDate, setIsCalendarEventChanged } = useCalendarContext();
   const [isModalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -60,7 +60,13 @@ export default function CalendarEventCreationModal() {
       is_routine: false,
     })
       .then(function () {
-        setFormData({});
+        setFormData({
+          event_time: null,
+          event_name: null,
+          event_description: null,
+          event_type: "class",
+          instructor_id: null,
+        });
         toast.success("Event created successfully", {
           position: toast.POSITION.BOTTOM_RIGHT,
           theme: "dark",
@@ -72,7 +78,7 @@ export default function CalendarEventCreationModal() {
           transition: Slide,
         });
         closeModal();
-        setIsEventAdded(true);
+        setIsCalendarEventChanged(true);
       })
       .catch(function (error) {
         setErrorMessage(error.response.data.message);

@@ -1,6 +1,7 @@
 import {
   createRoutineEventDB,
   fetchRoutineEventsDB,
+  deleteRoutineEventDB,
 } from "../db/routine.db.js";
 import { ErrorHandler } from "../middlewares/errorHandler.js";
 
@@ -39,6 +40,12 @@ class RoutineService {
     const routineEvents = await fetchRoutineEventsDB(class_id);
 
     return routineEvents;
+  }
+
+  async delete(eventObj) {
+    const { class_id, datetimes, event_day, event_time } = eventObj;
+
+    await deleteRoutineEventDB(class_id, datetimes, event_day, event_time);
   }
 }
 

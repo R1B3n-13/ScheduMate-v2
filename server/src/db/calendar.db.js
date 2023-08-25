@@ -1,7 +1,7 @@
 import pool from "../configs/pool.js";
 import { ErrorHandler } from "../middlewares/errorHandler.js";
 
-const createMultipleCalendarEventsDB = async (events, dates) => {
+const createMultipleCalendarEventsDB = async (class_id, events, dates) => {
   try {
     const client = await pool.connect();
 
@@ -10,8 +10,8 @@ const createMultipleCalendarEventsDB = async (events, dates) => {
 
       for (const date of dates) {
         await client.query(
-          "DELETE FROM calendar_events WHERE DATE(event_datetime) = $1 and is_routine = true;",
-          [date]
+          "DELETE FROM calendar_events WHERE class_id = $1 and DATE(event_datetime) = $2 and is_routine = true;",
+          [class_id, date]
         );
       }
 
@@ -58,7 +58,7 @@ const createMultipleCalendarEventsDB = async (events, dates) => {
   }
 };
 
-const deleteMultipleCalendarEventsDB = async (dates) => {
+const deleteMultipleCalendarEventsDB = async (class_id, dates) => {
   try {
     const client = await pool.connect();
 
@@ -67,8 +67,8 @@ const deleteMultipleCalendarEventsDB = async (dates) => {
 
       for (const date of dates) {
         await client.query(
-          "DELETE FROM calendar_events WHERE DATE(event_datetime) = $1;",
-          [date]
+          "DELETE FROM calendar_events WHERE class_id = $1 and DATE(event_datetime) = $2;",
+          [class_id, date]
         );
       }
 

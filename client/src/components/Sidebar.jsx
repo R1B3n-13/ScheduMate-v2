@@ -21,7 +21,7 @@ export default function Sidebar() {
                 <li
                   key={obj.class_id}
                   onClick={() => handleItemClick(obj)}
-                  className={`bg-gray-800 text-sm flex items-center rounded-e-full py-2 px-2 mb-4 cursor-pointer ${
+                  className={`bg-gray-800 text-sm font-medium flex items-center rounded-e-full py-2 px-2 mb-4 cursor-pointer ${
                     focusedClass === obj
                       ? "focused hover:bg-gray-600"
                       : "hover:bg-gray-700"

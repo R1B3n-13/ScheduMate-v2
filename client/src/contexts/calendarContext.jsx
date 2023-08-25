@@ -9,7 +9,7 @@ const CalendarContextProvider = ({ children }) => {
   const { focusedClass } = useClassroomContext();
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [isEventAdded, setIsEventAdded] = useState(false);
+  const [isCalendarEventChanged, setIsCalendarEventChanged] = useState(false);
 
   useEffect(() => {
     if (focusedClass) {
@@ -18,17 +18,17 @@ const CalendarContextProvider = ({ children }) => {
       }).then((res) => {
         if (res?.data.calendarEvents.length > 0) {
           setCalendarEvents([calendarEvents, ...res.data.calendarEvents]);
-          setIsEventAdded(false);
+          setIsCalendarEventChanged(false);
         }
       });
     }
-  }, [focusedClass, isEventAdded]);
+  }, [focusedClass, isCalendarEventChanged]);
 
   return (
     <CalendarContext.Provider
       value={{
         calendarEvents,
-        setIsEventAdded,
+        setIsCalendarEventChanged,
         selectedDate,
         setSelectedDate,
       }}

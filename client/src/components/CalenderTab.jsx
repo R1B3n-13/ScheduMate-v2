@@ -10,11 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function CalenderTab() {
   const currentDate = dayjs();
-  const { calendarEvents, selectedDate, setSelectedDate } =
-    useCalendarContext();
+  const {
+    calendarEvents,
+    selectedDate,
+    setSelectedDate,
+    setIsCalendarEventChanged,
+  } = useCalendarContext();
   const { focusedClass, userIdToNameMap } = useClassroomContext();
   const [today, setToday] = useState(currentDate);
-  const { setIsEventAdded } = useCalendarContext();
   const [formData, setFormData] = useState({
     startingDate: "",
     endingDate: "",
@@ -78,13 +81,16 @@ export default function CalenderTab() {
         dates.push(start.date(i).format("YYYY-MM-DD"));
       }
 
-      API.post("/classroom/calendar/deleteMultiple", { dates })
+      API.post("/classroom/calendar/deleteMultiple", {
+        class_id: focusedClass.class_id,
+        dates,
+      })
         .then(function () {
           setFormData({
             startingDate: "",
             endingDate: "",
           });
-          setIsEventAdded(true);
+          setIsCalendarEventChanged(true);
           toast.success("Events deleted successfully", {
             position: toast.POSITION.BOTTOM_RIGHT,
             theme: "dark",
