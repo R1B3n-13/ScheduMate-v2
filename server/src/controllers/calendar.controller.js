@@ -30,6 +30,16 @@ const deleteMultipleCalendarEvents = async (req, res, next) => {
   }
 };
 
+// Delete Calender Event endpoint
+const deleteCalendarEvent = async (req, res, next) => {
+  try {
+    await calendarService.delete(req.body);
+    return res.status(204).json({ status: "success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Fetch Calendar Events endpoint
 const fetchCalendarEvents = async (req, res, next) => {
   try {
@@ -45,4 +55,5 @@ export {
   deleteMultipleCalendarEvents,
   fetchCalendarEvents,
   createCalendarEvents,
+  deleteCalendarEvent,
 };

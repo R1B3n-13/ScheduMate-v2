@@ -85,6 +85,17 @@ const deleteMultipleCalendarEventsDB = async (class_id, dates) => {
   }
 };
 
+const deleteCalendarEventDB = async (class_id, event_datetime) => {
+  try {
+    await pool.query(
+      "DELETE FROM calendar_events WHERE class_id = $1 and event_datetime = $2;",
+      [class_id, event_datetime]
+    );
+  } catch (error) {
+    throw new ErrorHandler(500, "An error occurred");
+  }
+};
+
 const fetchCalendarEventsDB = async (class_id) => {
   try {
     const { rows: calendarEvents } = await pool.query(
@@ -139,4 +150,5 @@ export {
   deleteMultipleCalendarEventsDB,
   fetchCalendarEventsDB,
   createCalendarEventDB,
+  deleteCalendarEventDB,
 };

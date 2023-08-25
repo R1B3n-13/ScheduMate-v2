@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useCalendarContext } from "../contexts/calendarContext";
 import { useClassroomContext } from "../contexts/classroomContext";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -106,6 +107,29 @@ export default function CalenderTab() {
           setErrorMessage(error.response.data.message);
         });
     }
+  };
+
+  const deleteEvent = (event_datetime) => {
+    API.post("/classroom/calendar/delete", {
+      class_id: focusedClass.class_id,
+      event_datetime,
+    })
+      .then(function () {
+        toast.success("Event deleted successfully", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "dark",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          transition: Slide,
+        });
+        setIsCalendarEventChanged(true);
+      })
+      .catch(function (error) {
+        setErrorMessage(error.response.data.message);
+      });
   };
 
   const generateDate = (month = dayjs().month(), year = dayjs().year()) => {
@@ -228,7 +252,7 @@ export default function CalenderTab() {
           </div>
         </div>
         <div className="h-96 w-96 pl-3 overflow-auto">
-          <h1 className="flex font-semibold border-b border-gray-700">
+          <h1 className="flex mb-3 font-semibold">
             Schedule for
             <p className="text-cyan-300 ml-2">
               {selectedDate.toDate().toDateString()}
@@ -238,17 +262,37 @@ export default function CalenderTab() {
             calendar.get(selectedDate.toDate().toDateString()).map(
               (event, index) =>
                 event.class_id === focusedClass.class_id && (
-                  <li key={index} className="text-xs mt-2">
-                    <p className="text-red-500">
-                      Time: {dayjs(event.event_datetime).format("HH:mm:ss")}
-                    </p>
-                    <p>Name: {event.event_name}</p>
-                    <p>Description: {event.event_description}</p>
-                    <p>Type: {event.event_type}</p>
-                    <p>
-                      Instructor: {userIdToNameMap.get(event.instructor_id)}
-                    </p>
-                  </li>
+                  <div className="bg-gray-800 mb-3 text-sm text-slate-300 border border-slate-600 rounded p-3 w-72 shadow-lg whitespace-nowrap">
+                    <div className="flex overflow-x-scroll">
+                      <li key={index} className="text-xs">
+                        <p className="text-green-400 font-semibold">
+                          Time: {dayjs(event.event_datetime).format("HH:mm:ss")}
+                        </p>
+                        <p>Name: {event.event_name}</p>
+                        <p>Description: {event.event_description}</p>
+                        <p>Type: {event.event_type}</p>
+                        <p>
+                          Instructor: {userIdToNameMap.get(event.instructor_id)}
+                        </p>
+                      </li>
+                      {focusedClass &&
+                        (focusedClass.class_role === "admin" ||
+                          focusedClass.class_role === "moderator" ||
+                          (event.instructor_id &&
+                            event.instructor_id === focusedClass.user_id)) && (
+                          <RiDeleteBin5Line
+                            className="flex ml-auto mt-1 cursor-pointer text-red-500"
+                            onClick={() =>
+                              deleteEvent(
+                                dayjs(event.event_datetime).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                )
+                              )
+                            }
+                          />
+                        )}
+                    </div>
+                  </div>
                 )
             )}
         </div>

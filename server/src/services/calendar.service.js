@@ -1,6 +1,7 @@
 import {
   createCalendarEventDB,
   createMultipleCalendarEventsDB,
+  deleteCalendarEventDB,
   deleteMultipleCalendarEventsDB,
   fetchCalendarEventsDB,
 } from "../db/calendar.db.js";
@@ -16,9 +17,14 @@ class CalendarService {
     return calendarEvents;
   }
 
-  async deleteMultiple(eventDate) {
-    const { class_id, dates } = eventDate;
+  async deleteMultiple(eventData) {
+    const { class_id, dates } = eventData;
     await deleteMultipleCalendarEventsDB(class_id, dates);
+  }
+
+  async delete(eventData) {
+    const { class_id, event_datetime } = eventData;
+    await deleteCalendarEventDB(class_id, event_datetime);
   }
 
   async create(eventData) {
