@@ -183,7 +183,7 @@ export default function RoutineTab() {
               );
             })}
           </div>
-          <div className="w-96 h-96 pl-3 overflow-auto">
+          <div className="w-96 h-96 pl-4 overflow-auto">
             <div className="flex mb-3 font-semibold">
               Schedule for
               <h1 className="ml-2 text-cyan-300">{days[selectedDay]}</h1>

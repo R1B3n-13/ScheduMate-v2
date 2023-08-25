@@ -1,4 +1,8 @@
-import { createClassDB, getClassAndUserListDB } from "../db/classroom.db.js";
+import {
+  createClassDB,
+  getClassAndUserListDB,
+  joinClassDB,
+} from "../db/classroom.db.js";
 import { ErrorHandler } from "../middlewares/errorHandler.js";
 
 class ClassroomService {
@@ -14,6 +18,20 @@ class ClassroomService {
 
     const classInfo = await createClassDB(class_name, user_id);
     return classInfo;
+  }
+
+  async join(classData) {
+    const { class_id, user_id } = classData;
+
+    if (!class_id) {
+      throw new ErrorHandler(400, "Class code cannot be empty");
+    }
+    if (user_id === null) {
+      throw new ErrorHandler(401, "Unauthorized. Please log in.");
+    }
+
+    const userInfo = await joinClassDB(class_id, user_id);
+    return userInfo;
   }
 
   async getList(userID) {

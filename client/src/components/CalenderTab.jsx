@@ -251,7 +251,7 @@ export default function CalenderTab() {
             )}
           </div>
         </div>
-        <div className="h-96 w-96 pl-3 overflow-auto">
+        <div className="h-96 w-96 pl-4 overflow-auto">
           <h1 className="flex mb-3 font-semibold">
             Schedule for
             <p className="text-cyan-300 ml-2">

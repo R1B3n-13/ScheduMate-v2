@@ -17,7 +17,7 @@ const createClassDB = async (class_name, admin_id) => {
         "INSERT INTO class_users (class_id, user_id, class_role) VALUES ($1, $2, $3)",
         [newClass[0].class_id, admin_id, "admin"]
       );
-      
+
       await client.query("COMMIT");
 
       return newClass[0];
@@ -28,6 +28,29 @@ const createClassDB = async (class_name, admin_id) => {
       client.release();
     }
   } catch (error) {
+    throw new ErrorHandler(500, "An error occurred");
+  }
+};
+
+const joinClassDB = async (class_id, user_id) => {
+  try {
+    const { rows: newUser } = await pool.query(
+      "INSERT INTO class_users (class_id, user_id) VALUES ($1, $2)",
+      [class_id, user_id]
+    );
+
+    return newUser[0];
+  } catch (error) {
+    console.log(error);
+    if (error.routine === "string_to_uuid") {
+      throw new ErrorHandler(400, "Invalid code");
+    }
+    if (error.constraint === "class_users_class_id_fkey") {
+      throw new ErrorHandler(404, "No class found");
+    }
+    if (error.constraint === "class_users_pkey") {
+      throw new ErrorHandler(409, "Already joined");
+    }
     throw new ErrorHandler(500, "An error occurred");
   }
 };
@@ -69,4 +92,4 @@ const getClassAndUserListDB = async (user_id) => {
   }
 };
 
-export { createClassDB, getClassAndUserListDB };
+export { createClassDB, getClassAndUserListDB, joinClassDB };

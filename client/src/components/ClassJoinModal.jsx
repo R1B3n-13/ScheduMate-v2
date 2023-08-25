@@ -3,13 +3,13 @@ import { useState } from "react";
 import { useUserContext } from "../contexts/userContext";
 import { useClassroomContext } from "../contexts/classroomContext";
 import { IoCloseCircle } from "react-icons/io5";
-import { MdOutlineAddCard } from "react-icons/md";
+import { MdOutlinePersonAddAlt } from "react-icons/md";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function ClassCreationModal() {
+export default function ClassJoinModal() {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [class_name, setClassName] = useState("");
+  const [class_id, setClass_Id] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { userData } = useUserContext();
   const { setIsClassAdded } = useClassroomContext();
@@ -24,16 +24,16 @@ export default function ClassCreationModal() {
   };
 
   const handleInputChange = (e) => {
-    setClassName(e.target.value);
+    setClass_Id(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const user_id = userData.user_id;
-    API.post("/classroom/create", { class_name, user_id })
+    API.post("/classroom/join", { class_id, user_id })
       .then(function () {
-        setClassName({});
-        toast.success("Class created successfully", {
+        setClass_Id({});
+        toast.success("Joined class successfully", {
           position: toast.POSITION.BOTTOM_RIGHT,
           theme: "dark",
           autoClose: 2000,
@@ -57,8 +57,8 @@ export default function ClassCreationModal() {
         className="inline-flex items-center text-slate-200"
         onClick={openModal}
       >
-        <MdOutlineAddCard className="cursor-pointer" />
-        <p className="ml-2 cursor-pointer">Create class</p>
+        <MdOutlinePersonAddAlt className="cursor-pointer" />
+        <p className="ml-2 cursor-pointer">Join class</p>
       </div>
 
       {isModalOpen && (
@@ -66,7 +66,7 @@ export default function ClassCreationModal() {
           <div className="bg-gray-800 p-2 rounded-lg shadow-lg w-72">
             <div className="flex">
               <h2 className="text-xl font-semibold text-blue-300 p-3 mb-1">
-                Create class
+                Join class
               </h2>
               <div className="flex ml-auto">
                 <IoCloseCircle
@@ -78,13 +78,13 @@ export default function ClassCreationModal() {
             <form onSubmit={handleSubmit}>
               <div className="px-3">
                 <label className="block text-blue-200 text-sm mb-2">
-                  Class Name
+                  Class code
                 </label>
                 <div className="relative mb-4 flex items-center">
                   <input
                     type="text"
                     className="text-sm bg-bgcolor placeholder-gray-700 p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
-                    placeholder="Enter class name"
+                    placeholder="Enter class code"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -96,7 +96,7 @@ export default function ClassCreationModal() {
                 type="submit"
                 className="mx-auto my-4 rounded-sm px-4 h-9 w-20 flex items-center justify-center bg-blue-700 text-white hover:bg-blue-800 focus:outline-none focus:ring focus:border-blue-500"
               >
-                Create
+                Join
               </button>
             </form>
           </div>

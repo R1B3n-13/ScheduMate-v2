@@ -10,6 +10,16 @@ const createClass = async (req, res, next) => {
   }
 };
 
+// Join Class endpoint
+const joinClass = async (req, res, next) => {
+  try {
+    const userInfo = await classroomService.join(req.body);
+    return res.status(201).json({ status: "success", userInfo });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get ClassList endpoint
 const getClassAndUserList = async (req, res, next) => {
   try {
@@ -26,4 +36,4 @@ const getClassAndUserList = async (req, res, next) => {
   }
 };
 
-export { createClass, getClassAndUserList };
+export { createClass, getClassAndUserList, joinClass };

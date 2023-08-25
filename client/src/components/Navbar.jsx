@@ -6,6 +6,7 @@ import { FiHome } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import UserDropdown from "./UserDropdown";
 import ClassCreationModal from "./ClassCreationModal";
+import AddOrJoinDropdown from "./AddOrJoinDropdown";
 
 export default function Navbar() {
   const { isLoggedIn } = useAuthContext();
@@ -33,7 +34,8 @@ export default function Navbar() {
             Classroom
           </Link>
           <div className="ml-auto mr-5">
-            <ClassCreationModal />
+            <AddOrJoinDropdown />
+            {/* <ClassCreationModal /> */}
           </div>
           <div className="relative">
             <UserDropdown userName={userData && userData.name} />
