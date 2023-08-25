@@ -6,7 +6,7 @@ import signToken from "../helpers/signToken.js";
 
 class AuthService {
   async register(user) {
-    const { name, email, password } = user;
+    const { name, email, password, confirmPass } = user;
 
     if (!name) {
       throw new ErrorHandler(400, "Name cannot be empty");
@@ -19,6 +19,12 @@ class AuthService {
     }
     if (password.length < 8) {
       throw new ErrorHandler(400, "Password length should be at least 8");
+    }
+    if (!confirmPass) {
+      throw new ErrorHandler(401, "Type password again to confirm");
+    }
+    if (password !== confirmPass) {
+      throw new ErrorHandler(401, "Passwords do not match");
     }
 
     const existingUser = await getUserByEmailDB(email);

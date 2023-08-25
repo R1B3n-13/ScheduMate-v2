@@ -5,7 +5,7 @@ import { useAuthContext } from "./authContext";
 const UserContext = createContext();
 
 const UserContextProvider = ({ children }) => {
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, setIsLoggedIn } = useAuthContext();
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -14,8 +14,15 @@ const UserContextProvider = ({ children }) => {
     }
   }, [isLoggedIn]);
 
+  const logout = () => {
+    API.get("/logout").then(() => {
+      setUserData(null);
+      setIsLoggedIn(false);
+    });
+  };
+
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, setUserData, logout }}>
       {children}
     </UserContext.Provider>
   );

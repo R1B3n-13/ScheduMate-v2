@@ -28,4 +28,14 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-export { test, registerUser, loginUser };
+// Logout endpoint
+const logoutUser = async (req, res) => {
+  res.cookie("token", "none", {
+    expires: new Date(Date.now() + 1000),
+  });
+  return res
+    .status(200)
+    .json({ status: "success", message: "User logged out successfully" });
+};
+
+export { test, registerUser, loginUser, logoutUser };

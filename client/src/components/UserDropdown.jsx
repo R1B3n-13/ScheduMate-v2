@@ -1,11 +1,30 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../contexts/userContext";
 import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 
 export default function UserDropdown({ userName }) {
+  const { logout } = useUserContext();
+  const navigate = useNavigate();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [timerId, setTimerId] = useState(null);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleBlur = () => {
+    const id = setTimeout(() => {
+      setDropdownOpen(false);
+    }, 200);
+    setTimerId(id);
+  };
+
+  const handleFocus = () => {
+    if (timerId) {
+      clearTimeout(timerId);
+      setTimerId(null);
+    }
   };
 
   return (
@@ -16,7 +35,8 @@ export default function UserDropdown({ userName }) {
         }`}
         onClick={toggleDropdown}
         tabIndex="0"
-        onBlur={() => setDropdownOpen(false)}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
       >
         {userName && userName[0]}
       </div>
@@ -34,7 +54,13 @@ export default function UserDropdown({ userName }) {
               <FiSettings className="mr-2" />
               Settings
             </li>
-            <li className="cursor-pointer flex items-center">
+            <li
+              className="cursor-pointer flex items-center"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+            >
               <FiLogOut className="mr-2" />
               Logout
             </li>

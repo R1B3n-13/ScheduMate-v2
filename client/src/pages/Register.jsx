@@ -11,6 +11,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
+    confirmPass: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,9 +23,9 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { name, email, password } = formData;
+    const { name, email, password, confirmPass } = formData;
 
-    API.post("/register", { name, email, password })
+    API.post("/register", { name, email, password, confirmPass })
       .then(function () {
         setFormData({});
         navigate("/login");
@@ -47,7 +48,10 @@ export default function Register() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-gray-800 w-96 shadow-md rounded-lg p-8">
-        <Link to="/" className="mr-5 flex items-center justify-center font-bold mb-6">
+        <Link
+          to="/"
+          className="mr-5 flex items-center justify-center font-bold mb-6"
+        >
           <img
             src="./src/assets/logo.png"
             alt="logo"
@@ -101,8 +105,24 @@ export default function Register() {
               type="password"
               name="password"
               id="password"
-              className="text-sm bg-bgcolor px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              className="text-sm bg-bgcolor mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
               placeholder="Enter your password"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm font-medium text-blue-200"
+            >
+              Confirm password
+            </label>
+            <input
+              type="password"
+              name="confirmPass"
+              id="confirmPass"
+              className="text-sm bg-bgcolor px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              placeholder="Confirm your password"
               onChange={handleInputChange}
             />
           </div>
