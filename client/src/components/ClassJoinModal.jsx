@@ -63,7 +63,7 @@ export default function ClassJoinModal() {
 
       {isModalOpen && (
         <div className="h-screen w-screen fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
-          <div className="bg-gray-800 p-2 rounded-lg shadow-lg w-72">
+          <div className="bg-gray-800 p-2 rounded-lg shadow-lg w-96">
             <div className="flex">
               <h2 className="text-xl font-semibold text-blue-300 p-3 mb-1">
                 Join class

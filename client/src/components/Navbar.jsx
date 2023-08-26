@@ -5,8 +5,8 @@ import { useUserContext } from "../contexts/userContext";
 import { FiHome } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import UserDropdown from "./UserDropdown";
-import ClassCreationModal from "./ClassCreationModal";
 import AddOrJoinDropdown from "./AddOrJoinDropdown";
+import NavbarDropdown from "./NavbarDropdown";
 
 export default function Navbar() {
   const { isLoggedIn } = useAuthContext();
@@ -27,15 +27,17 @@ export default function Navbar() {
         <FiHome className="mr-2" />
         Home
       </Link>
+      {isLoggedIn === true && (
+        <Link to="/classroom" className="mr-5 flex items-center">
+          <SiGoogleclassroom className="mr-2" />
+          Classroom
+        </Link>
+      )}
+      <NavbarDropdown />
       {isLoggedIn === true ? (
         <>
-          <Link to="/classroom" className="mr-5 flex items-center">
-            <SiGoogleclassroom className="mr-2" />
-            Classroom
-          </Link>
           <div className="ml-auto mr-5">
             <AddOrJoinDropdown />
-            {/* <ClassCreationModal /> */}
           </div>
           <div className="relative">
             <UserDropdown userName={userData && userData.name} />

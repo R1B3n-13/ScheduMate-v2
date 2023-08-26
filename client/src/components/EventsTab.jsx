@@ -2,16 +2,22 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { useCalendarContext } from "../contexts/calendarContext";
 import { useClassroomContext } from "../contexts/classroomContext";
+import { useUserContext } from "../contexts/userContext";
 
 export default function EventsTab() {
   const { calendarEvents } = useCalendarContext();
-  const { userIdToNameMap } = useClassroomContext();
+  const { userIdToNameMap, focusedClass } = useClassroomContext();
+  const { userData } = useUserContext();
   const [selectedOption, setSelectedOption] = useState("all");
   const [daysFor, setDaysFor] = useState(3);
+  const [isChecked, setIsChecked] = useState(false);
   const currentDate = dayjs();
   const endDate = currentDate.add(daysFor, "day");
-
   const renderedEvents = [];
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   for (let index = 1; index < calendarEvents.length; index++) {
     const event = calendarEvents[index];
@@ -21,7 +27,11 @@ export default function EventsTab() {
       break;
     }
 
-    if (selectedOption === "all" || selectedOption === event.event_type)
+    if (
+      (selectedOption === "all" || selectedOption === event.event_type) &&
+      focusedClass.class_id === event.class_id &&
+      (!isChecked || userData.user_id === event.instructor_id)
+    )
       renderedEvents.push(
         <div
           key={index}
@@ -53,6 +63,17 @@ export default function EventsTab() {
   return (
     <div>
       <div className="flex mb-8">
+        <label className="flex items-center cursor-pointer ml-4">
+          <input
+            type="checkbox"
+            className="form-checkbox h-4 w-4 accent-gray-700"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          <span className="ml-2 text-slate-300">
+            Show only the classes you teach
+          </span>
+        </label>
         <select
           className="ml-auto text-sm bg-bgcolor p-2 w-28 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-5"
           value={selectedOption}
@@ -66,7 +87,7 @@ export default function EventsTab() {
         </select>
 
         <select
-          className="text-sm bg-bgcolor p-2 w-28 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400"
+          className="text-sm bg-bgcolor p-2 w-28 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-3"
           value={daysFor}
           onChange={handleDaysChange}
         >

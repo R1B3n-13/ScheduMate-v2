@@ -11,7 +11,7 @@ export default function AddOrJoinDropdown() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" tabIndex="0" onBlur={toggleDropdown}>
       <TfiPlus
         className="cursor-pointer text-blue-100 hover:text-blue-300 focus:text-blue-100"
         onClick={toggleDropdown}
