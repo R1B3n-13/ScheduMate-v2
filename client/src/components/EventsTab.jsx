@@ -9,7 +9,8 @@ export default function EventsTab() {
   const { userIdToNameMap, focusedClass } = useClassroomContext();
   const { userData } = useUserContext();
   const [selectedOption, setSelectedOption] = useState("all");
-  const [daysFor, setDaysFor] = useState(3);
+  const [expanded, setExpanded] = useState(false);
+  const [daysFor, setDaysFor] = useState(1);
   const [isChecked, setIsChecked] = useState(false);
   const currentDate = dayjs();
   const endDate = currentDate.add(daysFor, "day");
@@ -19,12 +20,27 @@ export default function EventsTab() {
     setIsChecked(!isChecked);
   };
 
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+
   for (let index = 1; index < calendarEvents.length; index++) {
     const event = calendarEvents[index];
     const eventDate = dayjs(event.event_datetime);
 
     if (eventDate.isAfter(endDate)) {
       break;
+    }
+
+    if (eventDate.isBefore(currentDate)) {
+      continue;
+    }
+
+    if (
+      daysFor === "2" &&
+      currentDate.toDate().toDateString() === eventDate.toDate().toDateString()
+    ) {
+      continue;
     }
 
     if (
@@ -63,19 +79,35 @@ export default function EventsTab() {
   return (
     <div>
       <div className="flex mb-8">
-        <label className="flex items-center cursor-pointer ml-4">
+        <label className="flex items-center justify-center cursor-pointer ml-4">
           <input
             type="checkbox"
             className="form-checkbox h-4 w-4 accent-gray-700"
             checked={isChecked}
             onChange={handleCheckboxChange}
           />
-          <span className="ml-2 text-slate-300">
-            Show only the classes you teach
+          <span className="ml-2 text-slate-400 text-sm">
+            Show only the ones you teach
           </span>
         </label>
+        <div className="flex rounded-full border border-gray-600 px-2 ml-auto justify-center items-center text-sm text-gray-300 font-semibold">
+          {expanded && (
+            <p
+              className="ml-1 text-sm text-slate-400 font-normal"
+              onClick={toggleExpand}
+            >
+              {focusedClass.class_id}
+            </p>
+          )}
+          <button
+            onClick={toggleExpand}
+            className="ml-1 text-sm text-slate-400 font-normal focus:outline-none"
+          >
+            {expanded ? "" : "Click to show class code"}
+          </button>
+        </div>
         <select
-          className="ml-auto text-sm bg-bgcolor p-2 w-28 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-5"
+          className="ml-auto text-sm bg-bgcolor p-2 w-28 text-slate-300 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-5"
           value={selectedOption}
           onChange={handleOptionChange}
         >
@@ -87,10 +119,12 @@ export default function EventsTab() {
         </select>
 
         <select
-          className="text-sm bg-bgcolor p-2 w-28 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-3"
+          className="text-sm bg-bgcolor p-2 w-28 text-slate-300 focus:outline-none border-b-2 border-slate-600 focus:border-slate-400 mr-3"
           value={daysFor}
           onChange={handleDaysChange}
         >
+          <option value={1}>Today</option>
+          <option value={2}>Tomorrow</option>
           <option value={3}>3 days</option>
           <option value={7}>7 days</option>
           <option value={30}>30 days</option>

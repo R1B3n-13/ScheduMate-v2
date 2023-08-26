@@ -64,7 +64,7 @@ const getClassAndUserListDB = async (user_id) => {
 
     const classIds = classList.map((item) => item.class_id);
     const { rows: classUsers } = await pool.query(
-      "SELECT class_id, user_id FROM class_users WHERE class_id = ANY($1)",
+      "SELECT class_id, user_id, class_role FROM class_users WHERE class_id = ANY($1)",
       [classIds]
     );
 
@@ -74,6 +74,16 @@ const getClassAndUserListDB = async (user_id) => {
         classIdToUserIdMap.set(classUser.class_id, []);
       }
       classIdToUserIdMap.get(classUser.class_id).push(classUser.user_id);
+    });
+
+    const userIdToRoleMap = new Map();
+
+    classUsers.forEach((classUser) => {
+      const key = JSON.stringify({
+        class_id: classUser.class_id,
+        user_id: classUser.user_id,
+      });
+      userIdToRoleMap.set(key, classUser.class_role);
     });
 
     const userIds = classUsers.map((item) => item.user_id);
@@ -86,7 +96,22 @@ const getClassAndUserListDB = async (user_id) => {
       nameIds.map((nameId) => [nameId.user_id, nameId.name])
     );
 
-    return { classList, classIdToUserIdMap, userIdToNameMap };
+    const { rows: emailIds } = await pool.query(
+      "SELECT user_id, email FROM users WHERE user_id = ANY($1)",
+      [userIds]
+    );
+
+    const userIdToEmailMap = new Map(
+      emailIds.map((emailId) => [emailId.user_id, emailId.email])
+    );
+
+    return {
+      classList,
+      classIdToUserIdMap,
+      userIdToNameMap,
+      userIdToEmailMap,
+      userIdToRoleMap,
+    };
   } catch (error) {
     throw new ErrorHandler(500, "An error occurred");
   }

@@ -23,13 +23,20 @@ const joinClass = async (req, res, next) => {
 // Get ClassList endpoint
 const getClassAndUserList = async (req, res, next) => {
   try {
-    const { classList, classIdToUserIdMap, userIdToNameMap } =
-      await classroomService.getList(req.body);
+    const {
+      classList,
+      classIdToUserIdMap,
+      userIdToNameMap,
+      userIdToEmailMap,
+      userIdToRoleMap,
+    } = await classroomService.getList(req.body);
     return res.status(200).json({
       status: "success",
       classList,
       classIdToUserIdMap: [...classIdToUserIdMap],
       userIdToNameMap: [...userIdToNameMap],
+      userIdToEmailMap: [...userIdToEmailMap],
+      userIdToRoleMap: [...userIdToRoleMap],
     });
   } catch (error) {
     next(error);

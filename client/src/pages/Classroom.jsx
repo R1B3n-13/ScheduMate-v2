@@ -3,8 +3,12 @@ import Tabs from "../components/Tabs";
 import RoutineTab from "../components/RoutineTab";
 import CalenderTab from "../components/CalenderTab";
 import EventsTab from "../components/EventsTab";
+import { useClassroomContext } from "../contexts/classroomContext";
+import UsersTab from "../components/UsersTab";
 
 export default function Dashboard() {
+  const { focusedClass } = useClassroomContext();
+
   const tabs = [
     {
       label: "Events",
@@ -19,6 +23,10 @@ export default function Dashboard() {
       content: <CalenderTab />,
     },
   ];
+
+  if (focusedClass.class_role === "admin") {
+    tabs.push({ label: "Users", content: <UsersTab /> });
+  }
 
   return (
     <div className="flex">
