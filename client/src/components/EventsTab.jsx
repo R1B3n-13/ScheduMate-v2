@@ -10,7 +10,7 @@ export default function EventsTab() {
   const { userData } = useUserContext();
   const [selectedOption, setSelectedOption] = useState("all");
   const [expanded, setExpanded] = useState(false);
-  const [daysFor, setDaysFor] = useState(0);
+  const [daysFor, setDaysFor] = useState("0");
   const [isChecked, setIsChecked] = useState(false);
   const currentDate = dayjs();
   const endDate = currentDate.add(daysFor, "day");
