@@ -1,4 +1,5 @@
 import {
+  changeRoleDB,
   createClassDB,
   getClassAndUserListDB,
   joinClassDB,
@@ -43,6 +44,16 @@ class ClassroomService {
 
     const classObject = await getClassAndUserListDB(user_id);
     return classObject;
+  }
+
+  async change(classData) {
+    const { class_id, user_id, class_role } = classData;
+
+    if (user_id === null || class_id === null) {
+      throw new ErrorHandler(401, "Unauthorized. Please log in.");
+    }
+
+    await changeRoleDB(class_id, user_id, class_role);
   }
 }
 

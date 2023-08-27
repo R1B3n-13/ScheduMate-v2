@@ -43,4 +43,14 @@ const getClassAndUserList = async (req, res, next) => {
   }
 };
 
-export { createClass, getClassAndUserList, joinClass };
+// Change Role endpoint
+const changeRole = async (req, res, next) => {
+  try {
+    await classroomService.change(req.body);
+    return res.status(201).json({ status: "success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createClass, getClassAndUserList, joinClass, changeRole };

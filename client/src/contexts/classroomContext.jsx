@@ -9,6 +9,7 @@ const ClassroomContextProvider = ({ children }) => {
   const [classList, setClassList] = useState([]);
   const [isClassAdded, setIsClassAdded] = useState(false);
   const [focusedClass, setFocusedClass] = useState([]);
+  const [isRoleChanged, setIsRoleChanged] = useState(false);
   const [classIdToUserIdMap, setClassIdToUserIdMap] = useState(new Map());
   const [userIdToNameMap, setUserIdToNameMap] = useState(new Map());
   const [userIdToEmailMap, setUserIdToEmailMap] = useState(new Map());
@@ -34,10 +35,11 @@ const ClassroomContextProvider = ({ children }) => {
         }
         if (res?.data.userIdToRoleMap.length > 0) {
           setUserIdToRoleMap(new Map(res.data.userIdToRoleMap));
+          setIsRoleChanged(false);
         }
       });
     }
-  }, [userData, isClassAdded]);
+  }, [userData, isClassAdded, isRoleChanged]);
 
   return (
     <ClassroomContext.Provider
@@ -50,6 +52,7 @@ const ClassroomContextProvider = ({ children }) => {
         userIdToEmailMap,
         userIdToRoleMap,
         setIsClassAdded,
+        setIsRoleChanged,
       }}
     >
       {children}

@@ -117,4 +117,15 @@ const getClassAndUserListDB = async (user_id) => {
   }
 };
 
-export { createClassDB, getClassAndUserListDB, joinClassDB };
+const changeRoleDB = async (class_id, user_id, class_role) => {
+  try {
+    await pool.query(
+      "UPDATE class_users SET class_role = $1 WHERE class_id = $2 and user_id = $3",
+      [class_role, class_id, user_id]
+    );
+  } catch (error) {
+    throw new ErrorHandler(500, "An error occurred");
+  }
+};
+
+export { createClassDB, getClassAndUserListDB, joinClassDB, changeRoleDB };
