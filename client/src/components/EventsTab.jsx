@@ -10,7 +10,7 @@ export default function EventsTab() {
   const { userData } = useUserContext();
   const [selectedOption, setSelectedOption] = useState("all");
   const [expanded, setExpanded] = useState(false);
-  const [daysFor, setDaysFor] = useState(1);
+  const [daysFor, setDaysFor] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const currentDate = dayjs();
   const endDate = currentDate.add(daysFor, "day");
@@ -28,7 +28,12 @@ export default function EventsTab() {
     const event = calendarEvents[index];
     const eventDate = dayjs(event.event_datetime);
 
-    if (eventDate.isAfter(endDate)) {
+    if (
+      eventDate.isAfter(endDate) &&
+      (daysFor !== "0" ||
+        currentDate.toDate().toDateString() !==
+          eventDate.toDate().toDateString())
+    ) {
       break;
     }
 
@@ -37,7 +42,7 @@ export default function EventsTab() {
     }
 
     if (
-      daysFor === "2" &&
+      daysFor === "1" &&
       currentDate.toDate().toDateString() === eventDate.toDate().toDateString()
     ) {
       continue;
@@ -123,8 +128,8 @@ export default function EventsTab() {
           value={daysFor}
           onChange={handleDaysChange}
         >
-          <option value={1}>Today</option>
-          <option value={2}>Tomorrow</option>
+          <option value={0}>Today</option>
+          <option value={1}>Tomorrow</option>
           <option value={3}>3 days</option>
           <option value={7}>7 days</option>
           <option value={30}>30 days</option>
