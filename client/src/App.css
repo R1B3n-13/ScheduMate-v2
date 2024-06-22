@@ -4,11 +4,55 @@
 @tailwind utilities;
 
 :root {
-  background-color: #111827;
+  background-color: #2d353b;
 }
 
 @layer base {
   html {
     font-family: Inter, system-ui, sans-serif;
   }
+}
+
+input[type="date"] {
+  position: relative;
+}
+
+input[type="date"]:after {
+  content: "\1F4C5";
+  padding: 0 5px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+
+input[type="date"]::-webkit-inner-spin-button {
+  z-index: 1;
+}
+
+input[type="date"]::-webkit-clear-button {
+  z-index: 1;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #697074;
+  border-radius: 10px;
 }

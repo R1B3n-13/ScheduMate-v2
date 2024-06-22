@@ -26,8 +26,10 @@ const RoutineContextProvider = ({ children }) => {
       }).then((res) => {
         if (res?.data.routineEvents.length > 0) {
           setRoutineEvents([routineEvents, ...res.data.routineEvents]);
-          setIsRoutineEventChanged(false);
+        } else {
+          setRoutineEvents([]);
         }
+        setIsRoutineEventChanged(false);
       });
     }
   }, [focusedClass, isRoutineEventChanged]);
@@ -39,6 +41,7 @@ const RoutineContextProvider = ({ children }) => {
         setSelectedDay,
         days,
         routineEvents,
+        setRoutineEvents,
         setIsRoutineEventChanged,
       }}
     >

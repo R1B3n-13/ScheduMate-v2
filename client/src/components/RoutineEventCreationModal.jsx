@@ -93,21 +93,21 @@ export default function RoutineEventCreationModal() {
       />
       {isModalOpen && (
         <div className="h-screen w-screen fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
-          <div className="bg-gray-800 p-2 rounded-lg shadow-lg w-96">
+          <div className="bg-everforest-bgSoft p-2 rounded-lg shadow-lg w-96">
             <div className="flex">
-              <h2 className="text-md font-semibold text-blue-300 p-3 mb-1">
+              <h2 className="text-md font-semibold text-everforest-header p-3 mb-1">
                 Create routine event for {days[selectedDay]}
               </h2>
               <div className="flex ml-auto">
                 <IoCloseCircle
-                  className="text-red-600 hover:text-red-500 focus:text-red-600"
+                  className="text-red-600 hover:text-everforest-red"
                   onClick={closeModal}
                 />
               </div>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="px-3">
-                <label className="block text-blue-200 text-sm mb-2">
+                <label className="block text-everforest-text text-sm mb-2">
                   Time (e.g. 22:45:00)
                 </label>
                 <div className="relative mb-4 flex items-center">
@@ -115,41 +115,45 @@ export default function RoutineEventCreationModal() {
                     type="text"
                     name="event_time"
                     value={formData.event_time}
-                    className="text-sm bg-bgcolor placeholder-gray-700 p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select placeholder-gray-500 p-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                     placeholder="Enter event time"
                     onChange={handleInputChange}
                   />
                 </div>
-                <label className="block text-blue-200 text-sm mb-2">Name</label>
+                <label className="block text-everforest-text text-sm mb-2">
+                  Name
+                </label>
                 <div className="relative mb-4 flex items-center">
                   <input
                     type="text"
                     name="event_name"
                     value={formData.event_name}
-                    className="text-sm bg-bgcolor placeholder-gray-700 p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select placeholder-gray-500 p-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                     placeholder="Enter event name"
                     onChange={handleInputChange}
                   />
                 </div>
-                <label className="block text-blue-200 text-sm mb-2">
+                <label className="block text-everforest-text text-sm mb-2">
                   Description
                 </label>
                 <div className="relative mb-4 flex items-center">
                   <textarea
                     name="event_description"
                     value={formData.event_description}
-                    className="text-sm bg-bgcolor placeholder-gray-700 p-2 w-full h-24 resize-none focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select placeholder-gray-500 p-2 w-full h-24 resize-none focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                     placeholder="Enter event description"
                     onChange={handleInputChange}
                   />
                 </div>
-                <label className="block text-blue-200 text-sm mb-2">Type</label>
+                <label className="block text-everforest-text text-sm mb-2">
+                  Type
+                </label>
                 <div className="relative mb-4 flex items-center">
                   <select
                     name="event_type"
                     value={formData.event_type}
                     onChange={handleInputChange}
-                    className="text-sm bg-bgcolor p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select p-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                   >
                     <option value="class">Class</option>
                     <option value="exam">Exam</option>
@@ -157,7 +161,7 @@ export default function RoutineEventCreationModal() {
                     <option value="other">Other</option>
                   </select>
                 </div>
-                <label className="block text-blue-200 text-sm mb-2">
+                <label className="block text-everforest-text text-sm mb-2">
                   Instructor
                 </label>
                 <div className="relative mb-4 flex items-center">
@@ -165,7 +169,7 @@ export default function RoutineEventCreationModal() {
                     name="instructor_id"
                     value={formData.instructor_id}
                     onChange={handleInputChange}
-                    className="text-sm bg-bgcolor p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select p-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                   >
                     <option value="" selected>
                       Select an instructor
@@ -181,7 +185,7 @@ export default function RoutineEventCreationModal() {
               </div>
               <button
                 type="submit"
-                className="mx-auto my-6 rounded-sm px-4 h-9 w-20 flex items-center justify-center bg-blue-700 text-white hover:bg-blue-800 focus:outline-none focus:ring focus:border-blue-500"
+                className="mx-auto my-6 rounded-sm px-4 h-9 w-20 flex items-center justify-center bg-everforest-blue text-everforest-text hover:bg-everforest-blueHover focus:outline-none focus:ring focus:ring-everforest-border"
               >
                 Create
               </button>

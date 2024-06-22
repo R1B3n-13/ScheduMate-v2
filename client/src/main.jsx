@@ -8,6 +8,7 @@ import { AuthContextProvider } from "./contexts/authContext";
 import { ClassroomContextProvider } from "./contexts/classroomContext.jsx";
 import { RoutineContextProvider } from "./contexts/routineContext.jsx";
 import { CalendarContextProvider } from "./contexts/calendarContext.jsx";
+import { LogoutContextProvider } from "./contexts/logoutContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,9 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ClassroomContextProvider>
           <CalendarContextProvider>
             <RoutineContextProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
+              <LogoutContextProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </LogoutContextProvider>
             </RoutineContextProvider>
           </CalendarContextProvider>
         </ClassroomContextProvider>

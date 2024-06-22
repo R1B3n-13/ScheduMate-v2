@@ -1,3 +1,4 @@
+import { ErrorHandler } from "../middlewares/errorHandler.js";
 import {
   createCalendarEventDB,
   createMultipleCalendarEventsDB,
@@ -37,6 +38,10 @@ class CalendarService {
       event_datetime,
       is_routine,
     } = eventData;
+
+    if (!event_datetime) {
+      throw new ErrorHandler(400, "Time cannot be empty");
+    }
 
     const calendarEvent = createCalendarEventDB(
       class_id,

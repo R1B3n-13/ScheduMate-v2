@@ -14,15 +14,8 @@ const UserContextProvider = ({ children }) => {
     }
   }, [isLoggedIn]);
 
-  const logout = () => {
-    API.get("/logout").then(() => {
-      setUserData(null);
-      setIsLoggedIn(false);
-    });
-  };
-
   return (
-    <UserContext.Provider value={{ userData, setUserData, logout }}>
+    <UserContext.Provider value={{ userData, setUserData }}>
       {children}
     </UserContext.Provider>
   );

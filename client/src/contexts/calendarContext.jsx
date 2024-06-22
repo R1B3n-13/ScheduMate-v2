@@ -18,8 +18,10 @@ const CalendarContextProvider = ({ children }) => {
       }).then((res) => {
         if (res?.data.calendarEvents.length > 0) {
           setCalendarEvents([calendarEvents, ...res.data.calendarEvents]);
-          setIsCalendarEventChanged(false);
+        } else {
+          setCalendarEvents([]);
         }
+        setIsCalendarEventChanged(false);
       });
     }
   }, [focusedClass, isCalendarEventChanged]);
@@ -28,6 +30,7 @@ const CalendarContextProvider = ({ children }) => {
     <CalendarContext.Provider
       value={{
         calendarEvents,
+        setCalendarEvents,
         setIsCalendarEventChanged,
         selectedDate,
         setSelectedDate,

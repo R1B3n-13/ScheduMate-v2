@@ -45,6 +45,7 @@ const ClassroomContextProvider = ({ children }) => {
     <ClassroomContext.Provider
       value={{
         classList,
+        setClassList,
         focusedClass,
         setFocusedClass,
         classIdToUserIdMap,

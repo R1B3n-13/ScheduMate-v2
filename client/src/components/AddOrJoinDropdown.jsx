@@ -13,12 +13,12 @@ export default function AddOrJoinDropdown() {
   return (
     <div className="relative">
       <TfiPlus
-        className="cursor-pointer text-blue-100 hover:text-blue-300 focus:text-blue-100"
+        className="cursor-pointer text-everforest-text hover:scale-110 transition-all"
         onClick={toggleDropdown}
       />
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
-          <ul className="py-2 px-3 text-base text-slate-200">
+        <div className="absolute right-0 mt-2 w-48 bg-everforest-bgSoft border border-everforest-border rounded-lg shadow-lg">
+          <ul className="p-1 text-base text-everforest-text">
             <ClassCreationModal />
             <ClassJoinModal />
           </ul>

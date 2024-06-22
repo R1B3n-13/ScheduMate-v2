@@ -8,6 +8,7 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 export default function CalenderTab() {
   const currentDate = dayjs();
@@ -17,6 +18,7 @@ export default function CalenderTab() {
     setSelectedDate,
     setIsCalendarEventChanged,
   } = useCalendarContext();
+
   const { focusedClass, userIdToNameMap } = useClassroomContext();
   const [today, setToday] = useState(currentDate);
   const [formData, setFormData] = useState({
@@ -176,8 +178,12 @@ export default function CalenderTab() {
   };
 
   return (
-    <>
-      <div className="flex mx-auto divide-x-2 divide-gray-800 gap-6 h-[72vh] items-center justify-center scale-110">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.75, ease: "easeOut" }}
+    >
+      <div className="flex mx-auto divide-x-2 divide-everforest-border gap-6 h-[calc(100vh-16rem)] items-center justify-center scale-110">
         <div className="w-96 h-96">
           <div className="flex justify-between items-center">
             <h1 className="select-none font-semibold">
@@ -191,7 +197,7 @@ export default function CalenderTab() {
                 }}
               />
               <h1
-                className="text-red-500 cursor-pointer hover:scale-105 transition-all"
+                className="text-everforest-red cursor-pointer hover:scale-105 transition-all"
                 onClick={() => {
                   setToday(currentDate);
                 }}
@@ -211,7 +217,7 @@ export default function CalenderTab() {
               return (
                 <h1
                   key={index}
-                  className="h-[3.4rem] grid place-content-center text-sm text-slate-400"
+                  className="h-[3.4rem] grid place-content-center text-sm text-everforest-text"
                 >
                   {day}
                 </h1>
@@ -224,19 +230,21 @@ export default function CalenderTab() {
                 return (
                   <div
                     key={index}
-                    className="h-[3.4rem] border-t border-gray-800 grid place-content-center text-sm"
+                    className="h-[3.4rem] border-t border-everforest-border grid place-content-center text-sm"
                   >
                     <h1
                       className={`${
-                        isCurrentMonth ? "text-slate-100" : "text-slate-500"
+                        isCurrentMonth
+                          ? "text-everforest-text"
+                          : "text-everforest-textDisabled"
                       } ${
                         isToday
-                          ? "bg-red-700 text-slate-50 hover:bg-red-800"
-                          : "hover:bg-slate-700 hover:text-white "
+                          ? "bg-everforest-pink text-everforest-text hover:bg-everforest-pinkHover"
+                          : "hover:bg-everforest-select"
                       } ${
                         selectedDate.toDate().toDateString() ===
                           date.toDate().toDateString() && !isToday
-                          ? "bg-slate-600 text-white"
+                          ? "bg-everforest-selectFocused"
                           : ""
                       } h-10 w-10 grid place-content-center rounded-full transition-all cursor-pointer`}
                       onClick={() => {
@@ -254,7 +262,7 @@ export default function CalenderTab() {
         <div className="h-96 w-96 pl-4 overflow-auto">
           <h1 className="flex mb-3 font-semibold">
             Schedule for
-            <p className="text-cyan-300 ml-2">
+            <p className="text-everforest-cyan ml-2">
               {selectedDate.toDate().toDateString()}
             </p>
           </h1>
@@ -262,10 +270,16 @@ export default function CalenderTab() {
             calendar.get(selectedDate.toDate().toDateString()).map(
               (event, index) =>
                 event.class_id === focusedClass.class_id && (
-                  <div className="bg-gray-800 mb-3 text-sm text-slate-300 border border-slate-600 rounded p-3 w-72 shadow-lg whitespace-nowrap">
-                    <div className="flex overflow-x-scroll">
-                      <li key={index} className="text-xs">
-                        <p className="text-green-400 font-semibold">
+                  <motion.div
+                    key={event.class_id + event.event_datetime}
+                    initial={{ y: "100%" }}
+                    animate={{ y: "0%" }}
+                    transition={{ duration: 0.6, ease: "backOut" }}
+                    className="bg-everforest-bgSoft mb-3 text-sm text-everforest-text border border-everforest-border rounded p-3 w-72 shadow-lg whitespace-nowrap"
+                  >
+                    <div className="flex overflow-x-auto">
+                      <ul key={index} className="text-xs">
+                        <p className="text-everforest-green font-semibold">
                           Time: {dayjs(event.event_datetime).format("HH:mm:ss")}
                         </p>
                         <p>Name: {event.event_name}</p>
@@ -274,14 +288,14 @@ export default function CalenderTab() {
                         <p>
                           Instructor: {userIdToNameMap.get(event.instructor_id)}
                         </p>
-                      </li>
+                      </ul>
                       {focusedClass &&
                         (focusedClass.class_role === "admin" ||
                           focusedClass.class_role === "moderator" ||
                           (event.instructor_id &&
                             event.instructor_id === focusedClass.user_id)) && (
                           <RiDeleteBin5Line
-                            className="flex ml-auto mt-1 cursor-pointer text-red-500"
+                            className="flex fixed top-2 right-2 ml-auto mt-1 cursor-pointer text-red-500"
                             onClick={() =>
                               deleteEvent(
                                 dayjs(event.event_datetime).format(
@@ -292,7 +306,7 @@ export default function CalenderTab() {
                           />
                         )}
                     </div>
-                  </div>
+                  </motion.div>
                 )
             )}
         </div>
@@ -307,14 +321,14 @@ export default function CalenderTab() {
                 <div className="inline-flex w-2/3 items-center justify-start">
                   <label
                     htmlFor="startingDate"
-                    className="text-xs font-semibold text-slate-300 mr-2"
+                    className="text-xs font-semibold text-everforest-text mr-2"
                   >
                     From:
                   </label>
                   <input
                     type="date"
                     name="startingDate"
-                    className="text-xs bg-bgcolor py-2 w-28 border-b-2 border-slate-600 focus:outline-none focus:border-slate-400 mr-5"
+                    className="text-xs bg-everforest-bg py-2 w-28 border-b-2 border-everforest-border focus:outline-none focus:border-everforest-borderFocused mr-5"
                     onChange={handleInputChange}
                     value={formData.startingDate}
                   />
@@ -327,13 +341,13 @@ export default function CalenderTab() {
                   <input
                     type="date"
                     name="endingDate"
-                    className="text-xs bg-bgcolor py-2 w-28 border-b-2 border-slate-600 focus:outline-none focus:border-slate-400 mr-5"
+                    className="text-xs bg-everforest-bg py-2 w-28 border-b-2 border-everforest-border focus:outline-none focus:border-everforest-borderFocused mr-5"
                     onChange={handleInputChange}
                     value={formData.endingDate}
                   />
                   <button
                     type="submit"
-                    className="w-fit h-fit text-xs flex items-center justify-center bg-blue-900 text-white mt-3 py-2 px-4 rounded-sm hover:bg-blue-800 focus:outline-none focus:ring focus:ring-blue-300"
+                    className="w-fit h-fit text-xs flex items-center justify-center bg-everforest-blue text-everforest-text mt-3 py-2 px-4 rounded-sm hover:bg-everforest-blueHover focus:outline-none focus:ring focus:ring-everforest-border"
                   >
                     Delete from calendar
                   </button>
@@ -350,6 +364,6 @@ export default function CalenderTab() {
             </div>
           )}
       </div>
-    </>
+    </motion.div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -46,8 +47,14 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="bg-gray-800 w-96 shadow-md rounded-lg p-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      exit={{ opacity: 0 }}
+      className="flex items-center justify-center min-h-screen"
+    >
+      <div className="bg-everforest-bgSoft w-96 shadow-lg rounded-lg p-8">
         <Link
           to="/"
           className="mr-5 flex items-center justify-center font-bold mb-6"
@@ -60,12 +67,14 @@ export default function Register() {
           <p className="text-white text-2xl">Schedu</p>
           <p className="text-[#54DAA8] text-lg">Mate</p>
         </Link>
-        <h2 className="text-blue-300 text-xl font-semibold mb-4">Register</h2>
+        <h2 className="text-everforest-header text-xl font-semibold mb-4">
+          Register
+        </h2>
         <form onSubmit={handleSubmit} noValidate>
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="block mb-1 text-sm font-medium text-blue-200"
+              className="block mb-1 text-sm font-medium text-everforest-text"
             >
               Name
             </label>
@@ -73,7 +82,7 @@ export default function Register() {
               type="text"
               name="name"
               id="name"
-              className="text-sm bg-bgcolor mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              className="text-sm bg-everforest-select placeholder-gray-500 mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
               placeholder="Enter your name"
               onChange={handleInputChange}
             />
@@ -81,7 +90,7 @@ export default function Register() {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block mb-1 text-sm font-medium text-blue-200"
+              className="block mb-1 text-sm font-medium text-everforest-text"
             >
               Email
             </label>
@@ -89,7 +98,7 @@ export default function Register() {
               type="email"
               name="email"
               id="email"
-              className="text-sm bg-bgcolor mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              className="text-sm bg-everforest-select placeholder-gray-500 mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
               placeholder="Enter your email"
               onChange={handleInputChange}
             />
@@ -97,7 +106,7 @@ export default function Register() {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block mb-1 text-sm font-medium text-blue-200"
+              className="block mb-1 text-sm font-medium text-everforest-text"
             >
               Password
             </label>
@@ -105,7 +114,7 @@ export default function Register() {
               type="password"
               name="password"
               id="password"
-              className="text-sm bg-bgcolor mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              className="text-sm bg-everforest-select placeholder-gray-500 mb-2 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
               placeholder="Enter your password"
               onChange={handleInputChange}
             />
@@ -113,7 +122,7 @@ export default function Register() {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block mb-1 text-sm font-medium text-blue-200"
+              className="block mb-1 text-sm font-medium text-everforest-text"
             >
               Confirm password
             </label>
@@ -121,7 +130,7 @@ export default function Register() {
               type="password"
               name="confirmPass"
               id="confirmPass"
-              className="text-sm bg-bgcolor px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+              className="text-sm bg-everforest-select placeholder-gray-500 px-4 py-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
               placeholder="Confirm your password"
               onChange={handleInputChange}
             />
@@ -131,12 +140,12 @@ export default function Register() {
           )}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white mt-3 py-2 px-4 rounded-sm hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-300"
+            className="w-full bg-everforest-greener text-everforest-text font-semibold mt-3 py-2 px-4 rounded-sm hover:bg-everforest-greenHover focus:outline-none focus:ring focus:ring-everforest-border"
           >
             Register
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }

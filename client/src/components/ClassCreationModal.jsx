@@ -54,7 +54,7 @@ export default function ClassCreationModal() {
   return (
     <>
       <div
-        className="inline-flex items-center text-slate-200"
+        className="flex items-center text-everforest-text py-1 px-3 hover:bg-everforest-select transition-all"
         onClick={openModal}
       >
         <MdOutlineAddCard className="cursor-pointer" />
@@ -63,27 +63,27 @@ export default function ClassCreationModal() {
 
       {isModalOpen && (
         <div className="h-screen w-screen fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
-          <div className="bg-gray-800 p-2 rounded-lg shadow-lg w-96">
+          <div className="bg-everforest-bgSoft p-2 rounded-lg shadow-lg w-96">
             <div className="flex">
-              <h2 className="text-xl font-semibold text-blue-300 p-3 mb-1">
+              <h2 className="text-xl font-semibold text-everforest-header p-3 mb-1">
                 Create class
               </h2>
               <div className="flex ml-auto">
                 <IoCloseCircle
-                  className="text-red-600 hover:text-red-500 focus:text-red-600"
+                  className="text-red-500 hover:text-everforest-red"
                   onClick={closeModal}
                 />
               </div>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="px-3">
-                <label className="block text-blue-200 text-sm mb-2">
+                <label className="block text-everforest-text text-sm mb-2">
                   Class Name
                 </label>
                 <div className="relative mb-4 flex items-center">
                   <input
                     type="text"
-                    className="text-sm bg-bgcolor placeholder-gray-700 p-2 w-full focus:outline-none focus:border-b-2 focus:border-blue-300"
+                    className="text-sm bg-everforest-select placeholder-gray-500 p-2 w-full focus:outline-none focus:border-b-2 focus:border-everforest-borderFocused"
                     placeholder="Enter class name"
                     onChange={handleInputChange}
                   />
@@ -94,7 +94,7 @@ export default function ClassCreationModal() {
               </div>
               <button
                 type="submit"
-                className="mx-auto my-4 rounded-sm px-4 h-9 w-20 flex items-center justify-center bg-blue-700 text-white hover:bg-blue-800 focus:outline-none focus:ring focus:border-blue-500"
+                className="mx-auto my-4 rounded-sm px-4 h-9 w-20 flex items-center justify-center bg-everforest-blue text-everforest-text hover:bg-everforest-blueHover focus:outline-none focus:ring focus:ring-everforest-border"
               >
                 Create
               </button>

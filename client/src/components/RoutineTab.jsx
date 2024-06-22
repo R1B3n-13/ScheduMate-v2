@@ -1,13 +1,14 @@
 import API from "../api/axios.config";
 import dayjs from "dayjs";
 import RoutineEventCreationModal from "../components/RoutineEventCreationModal";
+import { useState } from "react";
 import { useClassroomContext } from "../contexts/classroomContext";
 import { useRoutineContext } from "../contexts/routineContext";
 import { useCalendarContext } from "../contexts/calendarContext";
-import { useState } from "react";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
 
 export default function RoutineTab() {
   const { focusedClass, userIdToNameMap } = useClassroomContext();
@@ -19,6 +20,7 @@ export default function RoutineTab() {
     setIsRoutineEventChanged,
   } = useRoutineContext();
   const { setIsCalendarEventChanged, calendarEvents } = useCalendarContext();
+
   const [formData, setFormData] = useState({
     startingDate: "",
     endingDate: "",
@@ -157,22 +159,26 @@ export default function RoutineTab() {
   };
 
   return (
-    <>
-      <div className="flex mx-auto justify-center items-center h-[72vh] w-92 scale-110">
-        <div className="divide-x-2 divide-gray-800 gap-6 grid grid-cols-2">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.75, ease: "easeOut" }}
+    >
+      <div className="flex mx-auto justify-center items-center h-[calc(100vh-16rem)] w-92 scale-110">
+        <div className="divide-x-2 divide-everforest-border gap-6 grid grid-cols-2">
           <div className="cursor-pointer">
             {days.map((day, index) => {
               return (
                 <div
                   className={`${
                     day === days[selectedDay]
-                      ? "bg-slate-700"
-                      : "hover:bg-slate-800"
-                  }`}
+                      ? "bg-everforest-selectFocused"
+                      : "hover:bg-everforest-select"
+                  } transition-all`}
                 >
                   <h1
                     key={index}
-                    className="h-[3.4rem] py-3 pl-2 text-xl font-semibold text-slate-200 border-b border-gray-800"
+                    className="h-[3.4rem] py-3 pl-2 text-xl font-semibold text-everforest-text border-b border-everforest-border"
                     onClick={() => {
                       setSelectedDay(index);
                     }}
@@ -186,16 +192,22 @@ export default function RoutineTab() {
           <div className="w-96 h-96 pl-4 overflow-auto">
             <div className="flex mb-3 font-semibold">
               Schedule for
-              <h1 className="ml-2 text-cyan-300">{days[selectedDay]}</h1>
+              <h1 className="ml-2 text-everforest-cyan">{days[selectedDay]}</h1>
             </div>
             {routine.get(days[selectedDay]) &&
               routine.get(days[selectedDay]).map(
                 (event, index) =>
                   event.class_id === focusedClass.class_id && (
-                    <div className="bg-gray-800 mb-3 text-sm text-slate-300 border border-slate-600 rounded p-3 w-72 shadow-lg whitespace-nowrap">
-                      <div className="flex overflow-x-scroll">
-                        <li key={index} className="text-xs">
-                          <p className="text-green-400 font-semibold">
+                    <motion.div
+                      key={event.class_id + selectedDay + event.event_time}
+                      initial={{ y: "100%" }}
+                      animate={{ y: "0%" }}
+                      transition={{ duration: 0.6, ease: "backOut" }}
+                      className="bg-everforest-bgSoft mb-3 text-sm text-everforest-text border border-everforest-border rounded p-3 w-72 shadow-lg whitespace-nowrap"
+                    >
+                      <div className="flex overflow-x-auto">
+                        <ul key={index} className="text-xs">
+                          <p className="text-everforest-green font-semibold">
                             Time: {event.event_time}
                           </p>
                           <p>Name: {event.event_name}</p>
@@ -205,18 +217,18 @@ export default function RoutineTab() {
                             Instructor:{" "}
                             {userIdToNameMap.get(event.instructor_id)}
                           </p>
-                        </li>
+                        </ul>
                         {focusedClass &&
                           focusedClass.class_role === "admin" && (
                             <RiDeleteBin5Line
-                              className="flex ml-auto mt-1 cursor-pointer text-red-500"
+                              className="flex fixed top-2 right-2 mt-1  cursor-pointer text-red-500"
                               onClick={() =>
                                 deleteEvent(selectedDay, event.event_time)
                               }
                             />
                           )}
                       </div>
-                    </div>
+                    </motion.div>
                   )
               )}
           </div>
@@ -230,33 +242,33 @@ export default function RoutineTab() {
               <div className="inline-flex w-2/3 items-center justify-start">
                 <label
                   htmlFor="startingDate"
-                  className="text-xs font-semibold text-slate-300 mr-2"
+                  className="text-xs font-semibold text-everforest-text mr-2"
                 >
                   From:
                 </label>
                 <input
                   type="date"
                   name="startingDate"
-                  className="text-xs bg-bgcolor py-2 w-28 border-b-2 border-slate-600 focus:outline-none focus:border-slate-400 mr-5"
+                  className="text-xs bg-everforest-bg py-2 w-28 border-b-2 border-everforest-border focus:outline-none focus:border-everforest-borderFocused mr-5"
                   onChange={handleInputChange}
                   value={formData.startingDate}
                 />
                 <label
                   htmlFor="endingDate"
-                  className="text-xs font-semibold text-slate-300 mr-2"
+                  className="text-xs font-semibold text-everforest-text mr-2"
                 >
                   To:
                 </label>
                 <input
                   type="date"
                   name="endingDate"
-                  className="text-xs bg-bgcolor py-2 w-28 border-b-2 border-slate-600 focus:outline-none focus:border-slate-400 mr-5"
+                  className="text-xs bg-everforest-bg py-2 w-28 border-b-2 border-everforest-border focus:outline-none focus:border-everforest-borderFocused mr-5"
                   onChange={handleInputChange}
                   value={formData.endingDate}
                 />
                 <button
                   type="submit"
-                  className="w-fit h-fit text-xs flex items-center justify-center bg-blue-900 text-white mt-3 py-2 px-4 rounded-sm hover:bg-blue-800 focus:outline-none focus:ring focus:ring-blue-300"
+                  className="w-fit h-fit text-xs flex items-center justify-center bg-everforest-blue text-everforest-text mt-3 py-2 px-4 rounded-sm hover:bg-everforest-blueHover focus:outline-none focus:ring focus:ring-everforest-border"
                 >
                   Add to calendar
                 </button>
@@ -273,6 +285,6 @@ export default function RoutineTab() {
           </div>
         )}
       </div>
-    </>
+    </motion.div>
   );
 }
